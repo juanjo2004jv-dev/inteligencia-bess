@@ -19,7 +19,7 @@ st.markdown("Centro de inteligencia estratégica para proyectos de FV y Almacena
 # Configurar API de Gemini (Debe guardarse en st.secrets)
 API_KEY = st.secrets.get("GEMINI_API_KEY", "TU_API_KEY_AQUI")
 genai.configure(api_key=API_KEY)
-modelo_ia = genai.GenerativeModel('gemini-1.5-pro-latest')
+modelo_ia = genai.GenerativeModel('gemini-2.5-pro')
 
 # ==========================================
 # BASE DE DATOS LOCAL (SQLite - Histórico 60 días)
