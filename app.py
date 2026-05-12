@@ -152,7 +152,8 @@ with tab1:
                 st.download_button(label="📄 Descargar Informe Estratégico PDF",
                                    data=pdf_bytes,
                                    file_name="Reporte_BESS.pdf",
-                                   mime="application/pdf")
+                                   mime="application/pdf",
+                                   key=n[0])
     with col2:
         mostrar_dashboard_mercado()
 
