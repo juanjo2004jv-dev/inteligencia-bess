@@ -86,7 +86,7 @@ def generar_analisis_ia(texto_noticia):
         response = modelo_ia.generate_content(prompt)
         return response.text
     except Exception as e:
-        return "Error en la generación del análisis."
+        return f"Error de la IA: {str(e)}"
 
 # ==========================================
 # VISUALIZACIÓN DE GRÁFICAS (Plotly - ESIOS Simulado)
