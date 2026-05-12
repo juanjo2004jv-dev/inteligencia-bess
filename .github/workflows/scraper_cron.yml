@@ -1,0 +1,40 @@
+name: Recoleccion e Inteligencia BESS-PV
+
+on:
+  schedule:
+    # Formato Cron: Minuto Hora Día Mes Día-Semana (UTC)
+    # 06:00 UTC equivale a 07:00 CET (invierno) / 08:00 CEST (verano)
+    - cron: '0 6 * * 1,4' # Se ejecuta Lunes (1) y Jueves (4)
+  workflow_dispatch: # Permite ejecución manual
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependencias
+        run: |
+          pip install -r requirements.txt
+
+      - name: Ejecutar Extractor y Analista IA
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          # Aquí ejecutaríamos un script independiente (ej: scraper.py)
+          # que alimente la base de datos de SQLite o JSON
+          python app.py --headless
+          
+      - name: Commit y Push de la base de datos actualizada
+        run: |
+          git config --global user.name 'GitHub Action Bot'
+          git config --global user.email 'action@github.com'
+          git add bess_intelligence.db
+          git commit -m "Actualización automática de base de datos de inteligencia" || echo "Sin cambios"
+          git push
