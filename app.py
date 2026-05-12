@@ -20,7 +20,7 @@ st.markdown("Centro de inteligencia estratégica para proyectos de FV y Almacena
 # Configurar API de Gemini (Debe guardarse en st.secrets)
 API_KEY = st.secrets.get("GEMINI_API_KEY", "TU_API_KEY_AQUI")
 genai.configure(api_key=API_KEY)
-modelo_ia = genai.GenerativeModel('gemini-2.0-flash')
+modelo_ia = genai.GenerativeModel('gemini-1.5-flash')
 
 # ==========================================
 # BASE DE DATOS LOCAL (SQLite - Histórico 60 días)
@@ -137,7 +137,7 @@ with tab1:
                     c.execute("INSERT INTO news (date, title, source, link, content, ai_analysis) VALUES (?, ?, ?, ?, ?, ?)",
                               (n['date'], n['title'], n['source'], n['link'], n['content'], analisis))
                     conn.commit()
-                    time.sleep(4)  # <-- Válvula de 4 segundos para evitar el bloqueo 429
+                    time.sleep(5)  # <-- Válvula de 5 segundos para ir sobrados en la capa gratuita
             st.success("Extracción y análisis completados.")
             
         # Mostrar noticias recientes
