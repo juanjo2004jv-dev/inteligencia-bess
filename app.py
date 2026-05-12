@@ -8,6 +8,7 @@ from fpdf import FPDF
 from datetime import datetime, timedelta
 import requests
 from bs4 import BeautifulSoup
+import time
 
 # ==========================================
 # CONFIGURACIÓN INICIAL Y UI
@@ -19,7 +20,7 @@ st.markdown("Centro de inteligencia estratégica para proyectos de FV y Almacena
 # Configurar API de Gemini (Debe guardarse en st.secrets)
 API_KEY = st.secrets.get("GEMINI_API_KEY", "TU_API_KEY_AQUI")
 genai.configure(api_key=API_KEY)
-modelo_ia = genai.GenerativeModel('gemini-2.5-pro')
+modelo_ia = genai.GenerativeModel('gemini-2.0-flash')
 
 # ==========================================
 # BASE DE DATOS LOCAL (SQLite - Histórico 60 días)
@@ -127,7 +128,7 @@ with tab1:
     with col1:
         st.subheader("Última Inteligencia de Mercado")
         if st.button("🔄 Ejecutar Extracción y Análisis Ahora"):
-            with st.spinner("Extrayendo datos de RSS, BOE, y ESIOS..."):
+            with st.spinner("Extrayendo datos y procesando con IA (puede tardar 1-2 minutos)..."):
                 noticias = fetch_rss_feeds()
                 for n in noticias:
                     analisis = generar_analisis_ia(n['content'])
@@ -136,6 +137,7 @@ with tab1:
                     c.execute("INSERT INTO news (date, title, source, link, content, ai_analysis) VALUES (?, ?, ?, ?, ?, ?)",
                               (n['date'], n['title'], n['source'], n['link'], n['content'], analisis))
                     conn.commit()
+                    time.sleep(4)  # <-- Válvula de 4 segundos para evitar el bloqueo 429
             st.success("Extracción y análisis completados.")
             
         # Mostrar noticias recientes
