@@ -19,7 +19,7 @@ st.markdown("Centro de inteligencia estratégica para proyectos de FV y Almacena
 # Configurar API de Gemini (Debe guardarse en st.secrets)
 API_KEY = st.secrets.get("GEMINI_API_KEY", "TU_API_KEY_AQUI")
 genai.configure(api_key=API_KEY)
-modelo_ia = genai.GenerativeModel('gemini-3.1-pro-preview')
+modelo_ia = genai.GenerativeModel('gemini-1.1-pro')
 
 # ==========================================
 # BASE DE DATOS LOCAL (SQLite - Histórico 60 días)
@@ -143,7 +143,7 @@ with tab1:
         c.execute("SELECT title, ai_analysis, link, date FROM news ORDER BY id DESC LIMIT 5")
         recientes = c.fetchall()
         
-        for n in recientes:
+        for i, n in enumerate(recientes):
             with st.expander(f"📌 {n[0]} - ({n[3]})"):
                 st.write(f"[Leer fuente original]({n[2]})")
                 st.markdown(n[1])
@@ -151,9 +151,9 @@ with tab1:
                 pdf_bytes = exportar_pdf(n[0], n[1])
                 st.download_button(label="📄 Descargar Informe Estratégico PDF",
                                    data=pdf_bytes,
-                                   file_name="Reporte_BESS.pdf",
+                                   file_name=f"Reporte_BESS_{i}.pdf",
                                    mime="application/pdf",
-                                   key=n[0])
+                                   key=f"boton_pdf_{i}")
     with col2:
         mostrar_dashboard_mercado()
 
