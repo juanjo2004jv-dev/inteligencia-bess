@@ -10,6 +10,8 @@ import requests
 from bs4 import BeautifulSoup
 import time
 
+pip install -q -U google-genai
+
 # ==========================================
 # CONFIGURACIÓN INICIAL Y UI
 # ==========================================
